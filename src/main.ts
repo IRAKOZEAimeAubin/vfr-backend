@@ -12,6 +12,7 @@ async function bootstrap() {
     .setTitle('VFR')
     .setDescription('VFR Staff Management System')
     .setVersion('0.1')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

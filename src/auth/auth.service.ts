@@ -1,26 +1,36 @@
-import { Injectable } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { JwtService } from '@nestjs/jwt';
+import { AuthEntity } from './entities/auth.entity';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
-  }
+  constructor(private prisma: PrismaService, private jwtService: JwtService) {}
 
-  findAll() {
-    return `This action returns all auth`;
-  }
+  async login(username: string, password: string): Promise<AuthEntity> {
+    const user = await this.prisma.user.findUnique({ where: { username } });
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
+    if (!user) {
+      throw new NotFoundException(`No user found with username: ${username}`);
+    }
 
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
+    const isPasswordValid = await bcrypt.compare(password, user.password);
 
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+    if (!isPasswordValid) {
+      throw new UnauthorizedException(`Invalid password. Please try again!`);
+    }
+
+    return {
+      accessToken: this.jwtService.sign({
+        userId: user.id,
+        name: user.name,
+        role: user.role,
+      }),
+    };
   }
 }
