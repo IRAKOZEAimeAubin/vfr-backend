@@ -25,11 +25,14 @@ model Member {
   regNumber      String @unique
   phone          String @unique
   department     String
-  monthlySavings Int
+  monthlySavings Float
+  loans          Loan[]
 }
 
 model Loan {
-  id String @id @default(uuid())
+  id       String  @id @default(uuid())
+  Member   Member? @relation(fields: [memberId], references: [id])
+  memberId String?
 }
 
 model Savings {
