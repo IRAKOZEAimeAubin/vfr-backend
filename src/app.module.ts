@@ -7,9 +7,18 @@ import { AuthModule } from './auth/auth.module';
 import { MembersModule } from './members/members.module';
 import { LoansModule } from './loans/loans.module';
 import { SavingsModule } from './savings/savings.module';
+import { LoanTypesModule } from './loan-types/loan-types.module';
 
 @Module({
-  imports: [PrismaModule, UsersModule, AuthModule, MembersModule, LoansModule, SavingsModule],
+  imports: [
+    PrismaModule,
+    UsersModule,
+    AuthModule,
+    MembersModule,
+    LoansModule,
+    SavingsModule,
+    LoanTypesModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
