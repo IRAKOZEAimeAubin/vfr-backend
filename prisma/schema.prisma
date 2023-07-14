@@ -21,16 +21,15 @@ model User {
 }
 
 model Member {
-  id             String    @id @default(uuid())
-  regNumber      String    @unique
+  id             String   @id @default(uuid())
+  regNumber      String   @unique
   name           String
-  phone          String    @unique
+  phone          String   @unique
   department     String
   monthlySavings Float
-  savings        Savings[]
   loans          Loan[]
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
 
 model LoanType {
@@ -44,19 +43,23 @@ model LoanType {
 }
 
 model Loan {
-  id         String    @id @default(uuid())
-  member     Member?   @relation(fields: [memberId], references: [id])
-  memberId   String?
-  loanType   LoanType? @relation(fields: [loanTypeId], references: [id])
-  loanTypeId String?
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
+  id           String    @id @default(uuid())
+  amount       Float
+  installments Int
+  reason       String
+  member       Member?   @relation(fields: [memberId], references: [id])
+  memberId     String?
+  loanType     LoanType? @relation(fields: [loanTypeId], references: [id])
+  loanTypeId   String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 }
 
 model Savings {
   id        String   @id @default(uuid())
-  member    Member?  @relation(fields: [memberId], references: [id])
-  memberId  String?
+  amount    Float
+  date      DateTime @default(now())
+  comment   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

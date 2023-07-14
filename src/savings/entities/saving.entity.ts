@@ -1,1 +1,1 @@
-export class Saving {}
+export class SavingEntity {}
