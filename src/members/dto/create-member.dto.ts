@@ -20,5 +20,8 @@ export class CreateMemberDto {
   department: string;
 
   @ApiProperty()
-  monthlySavings: number;
+  monthlyPledge: number;
+
+  @ApiProperty()
+  active: boolean;
 }

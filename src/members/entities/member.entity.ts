@@ -13,7 +13,9 @@ export class MemberEntity implements Member {
   @ApiProperty()
   department: string;
   @ApiProperty()
-  monthlySavings: number;
+  monthlyPledge: number;
+  @ApiProperty({ required: false })
+  active: boolean;
   @ApiProperty()
   createdAt: Date;
   @ApiProperty()
