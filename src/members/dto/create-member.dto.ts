@@ -22,6 +22,6 @@ export class CreateMemberDto {
   @ApiProperty()
   monthlyPledge: number;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   active: boolean;
 }
