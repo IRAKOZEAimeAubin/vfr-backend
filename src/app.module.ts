@@ -8,6 +8,7 @@ import { MembersModule } from './members/members.module';
 import { LoansModule } from './loans/loans.module';
 import { SavingsModule } from './savings/savings.module';
 import { LoanTypesModule } from './loan-types/loan-types.module';
+import { TotalSavingsModule } from './total-savings/total-savings.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { LoanTypesModule } from './loan-types/loan-types.module';
     LoansModule,
     SavingsModule,
     LoanTypesModule,
+    TotalSavingsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

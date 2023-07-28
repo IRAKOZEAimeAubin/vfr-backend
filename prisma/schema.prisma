@@ -27,6 +27,7 @@ model Member {
   phone         String    @unique
   department    String
   monthlyPledge Float
+  totalPledge   Float     @default(0)
   active        Boolean?  @default(true)
   savings       Savings[]
   loans         Loan[]
@@ -58,18 +59,19 @@ model Loan {
 }
 
 model Savings {
-  id          String   @id @default(uuid())
-  totalPledge Float
-  Member      Member?  @relation(fields: [memberId], references: [id])
-  memberId    String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(uuid())
+  savings   Float
+  Member    Member?  @relation(fields: [memberId], references: [id])
+  memberId  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model TotalSavings {
   id        String   @id @default(uuid())
   amount    Float
   comment   String
+  status    Boolean? @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
