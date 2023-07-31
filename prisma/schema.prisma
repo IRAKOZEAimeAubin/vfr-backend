@@ -54,6 +54,7 @@ model Loan {
   memberId     String?
   loanType     LoanType? @relation(fields: [loanTypeId], references: [id])
   loanTypeId   String?
+  approved     Boolean?  @default(false)
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 }
@@ -71,7 +72,7 @@ model TotalSavings {
   id        String   @id @default(uuid())
   amount    Float
   comment   String
-  status    Boolean? @default(true)
+  approved  Boolean? @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

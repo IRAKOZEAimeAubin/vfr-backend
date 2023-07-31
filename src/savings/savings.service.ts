@@ -12,15 +12,15 @@ export class SavingsService {
     return `This action returns all savings`;
   }
 
-  findOne(id: number) {
+  findOne(id: string) {
     return `This action returns a #${id} saving`;
   }
 
-  update(id: number, updateSavingDto: UpdateSavingDto) {
+  update(id: string, updateSavingDto: UpdateSavingDto) {
     return `This action updates a #${id} saving`;
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} saving`;
   }
 }
