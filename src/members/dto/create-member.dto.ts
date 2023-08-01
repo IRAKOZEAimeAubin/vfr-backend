@@ -22,6 +22,7 @@ export class CreateMemberDto {
   @ApiProperty()
   monthlyPledge: number;
 
+  @ApiProperty({ required: false })
   totalPledge: number;
 
   @ApiProperty({ required: false })

@@ -1,15 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsString, MinLength } from 'class-validator';
+import { IsBoolean } from 'class-validator';
 
 export class CreateTotalSavingDto {
   amount: number;
 
-  @IsString()
-  @MinLength(4)
-  @ApiProperty()
+  @ApiProperty({ required: false })
   comment: string;
 
-  @IsBoolean()
-  @ApiProperty({ required: false })
+  @ApiProperty({ required: false, default: false })
   approved: boolean;
 }

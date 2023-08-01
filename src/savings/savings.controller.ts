@@ -28,14 +28,6 @@ import { SavingsEntity } from './entities/saving.entity';
 export class SavingsController {
   constructor(private readonly savingsService: SavingsService) {}
 
-  // @Post()
-  // @UseGuards(JwtAuthGuard)
-  // @ApiBearerAuth()
-  // @ApiCreatedResponse({ type: SavingsEntity })
-  // create(@Body() createSavingDto: CreateSavingDto) {
-  //   return this.savingsService.create(createSavingDto);
-  // }
-
   @Get()
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()

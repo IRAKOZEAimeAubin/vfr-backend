@@ -24,6 +24,18 @@ export class TotalSavingsService {
       0,
     );
 
+    const savingsPromises = activeMembers.map((member) =>
+      this.prisma.savings.create({
+        data: {
+          previousSavings: member.totalPledge,
+          currentSavings: member.totalPledge + member.monthlyPledge,
+          memberId: member.id,
+        },
+      }),
+    );
+
+    await Promise.all(savingsPromises);
+
     const membersPromises = activeMembers.map((member) =>
       this.prisma.member.update({
         where: {
@@ -37,7 +49,12 @@ export class TotalSavingsService {
 
     await Promise.all(membersPromises);
 
+    const month = new Intl.DateTimeFormat('en-EN', { month: 'long' }).format(
+      new Date(Date.now()),
+    );
+
     createTotalSavingDto.amount = totalAmount;
+    createTotalSavingDto.comment = `Being total savings for ${month}`;
 
     return this.prisma.totalSavings.create({
       data: createTotalSavingDto,

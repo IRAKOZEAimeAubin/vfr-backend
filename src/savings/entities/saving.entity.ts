@@ -3,9 +3,11 @@ import { Savings } from '@prisma/client';
 
 export class SavingsEntity implements Savings {
   @ApiProperty()
-  savings: number;
-  @ApiProperty()
   id: string;
+  @ApiProperty()
+  previousSavings: number;
+  @ApiProperty()
+  currentSavings: number;
   @ApiProperty()
   memberId: string;
   @ApiProperty()
