@@ -12,7 +12,12 @@ import {
 import { LoanTypesService } from './loan-types.service';
 import { CreateLoanTypeDto } from './dto/create-loan-type.dto';
 import { UpdateLoanTypeDto } from './dto/update-loan-type.dto';
-import { ApiBearerAuth, ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { PrismaClientExceptionFilter } from 'src/prisma-client-exception/prisma-client-exception.filter';
 import { LoanTypeEntity } from './entities/loan-type.entity';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
@@ -34,7 +39,7 @@ export class LoanTypesController {
   @Get()
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiCreatedResponse({ type: LoanTypeEntity, isArray: true })
+  @ApiOkResponse({ type: LoanTypeEntity, isArray: true })
   findAll() {
     return this.loanTypesService.findAll();
   }
@@ -42,7 +47,7 @@ export class LoanTypesController {
   @Get(':id')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiCreatedResponse({ type: LoanTypeEntity })
+  @ApiOkResponse({ type: LoanTypeEntity })
   findOne(@Param('id') id: string) {
     return this.loanTypesService.findOne(id);
   }
@@ -50,7 +55,7 @@ export class LoanTypesController {
   @Patch(':id')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiCreatedResponse({ type: LoanTypeEntity })
+  @ApiOkResponse({ type: LoanTypeEntity })
   update(
     @Param('id') id: string,
     @Body() updateLoanTypeDto: UpdateLoanTypeDto,
@@ -61,7 +66,7 @@ export class LoanTypesController {
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiCreatedResponse({ type: LoanTypeEntity })
+  @ApiOkResponse({ type: LoanTypeEntity })
   remove(@Param('id') id: string) {
     return this.loanTypesService.remove(id);
   }

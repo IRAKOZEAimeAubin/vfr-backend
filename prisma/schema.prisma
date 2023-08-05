@@ -63,7 +63,7 @@ model Savings {
   id              String   @id @default(uuid())
   previousSavings Float
   currentSavings  Float
-  Member          Member?  @relation(fields: [memberId], references: [id])
+  member          Member?  @relation(fields: [memberId], references: [id])
   memberId        String?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
