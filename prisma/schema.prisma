@@ -28,7 +28,7 @@ model Member {
   department    String
   monthlyPledge Float
   totalPledge   Float     @default(0)
-  active        Boolean?  @default(true)
+  active        Boolean?
   savings       Savings[]
   loans         Loan[]
   createdAt     DateTime  @default(now())
