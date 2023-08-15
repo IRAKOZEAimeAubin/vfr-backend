@@ -52,15 +52,26 @@ export class TotalSavingsController {
     return this.totalSavingsService.findOne(id);
   }
 
-  @Patch(':id')
+  @Patch(':id/approve')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOkResponse({ type: TotalSavingEntity })
-  update(
+  approve(
     @Param('id') id: string,
     @Body() updateTotalSavingDto: UpdateTotalSavingDto,
   ) {
-    return this.totalSavingsService.update(id, updateTotalSavingDto);
+    return this.totalSavingsService.approve(id, updateTotalSavingDto);
+  }
+
+  @Patch(':id/reject')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOkResponse({ type: TotalSavingEntity })
+  reject(
+    @Param('id') id: string,
+    @Body() updateTotalSavingDto: UpdateTotalSavingDto,
+  ) {
+    return this.totalSavingsService.reject(id, updateTotalSavingDto);
   }
 
   @Delete(':id')

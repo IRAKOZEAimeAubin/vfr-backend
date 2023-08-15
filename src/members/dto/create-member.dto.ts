@@ -25,6 +25,6 @@ export class CreateMemberDto {
   @ApiProperty({ required: false })
   totalPledge: number;
 
-  @ApiProperty({ required: false })
+  @ApiProperty()
   active: boolean;
 }

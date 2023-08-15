@@ -24,6 +24,42 @@ export class TotalSavingsService {
       0,
     );
 
+    const month = new Intl.DateTimeFormat('en-EN', { month: 'long' }).format(
+      new Date(Date.now()),
+    );
+
+    createTotalSavingDto.amount = totalAmount;
+    createTotalSavingDto.comment = `Being total savings for ${month}`;
+
+    return this.prisma.totalSavings.create({
+      data: createTotalSavingDto,
+    });
+  }
+
+  findAll() {
+    return this.prisma.totalSavings.findMany();
+  }
+
+  findOne(id: string) {
+    return this.prisma.totalSavings.findUnique({
+      where: {
+        id,
+      },
+    });
+  }
+
+  async approve(id: string, updateTotalSavingDto: UpdateTotalSavingDto) {
+    const activeMembers = await this.prisma.member.findMany({
+      where: {
+        active: true,
+      },
+      select: {
+        id: true,
+        monthlyPledge: true,
+        totalPledge: true,
+      },
+    });
+
     const savingsPromises = activeMembers.map((member) =>
       this.prisma.savings.create({
         data: {
@@ -49,31 +85,17 @@ export class TotalSavingsService {
 
     await Promise.all(membersPromises);
 
-    const month = new Intl.DateTimeFormat('en-EN', { month: 'long' }).format(
-      new Date(Date.now()),
-    );
+    updateTotalSavingDto.approved = true;
 
-    createTotalSavingDto.amount = totalAmount;
-    createTotalSavingDto.comment = `Being total savings for ${month}`;
-
-    return this.prisma.totalSavings.create({
-      data: createTotalSavingDto,
+    return this.prisma.totalSavings.update({
+      where: { id },
+      data: updateTotalSavingDto,
     });
   }
 
-  findAll() {
-    return this.prisma.totalSavings.findMany();
-  }
+  reject(id: string, updateTotalSavingDto: UpdateTotalSavingDto) {
+    updateTotalSavingDto.approved = false;
 
-  findOne(id: string) {
-    return this.prisma.totalSavings.findUnique({
-      where: {
-        id,
-      },
-    });
-  }
-
-  update(id: string, updateTotalSavingDto: UpdateTotalSavingDto) {
     return this.prisma.totalSavings.update({
       where: { id },
       data: updateTotalSavingDto,

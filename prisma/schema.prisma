@@ -28,7 +28,7 @@ model Member {
   department    String
   monthlyPledge Float
   totalPledge   Float     @default(0)
-  active        Boolean?
+  active        Boolean
   savings       Savings[]
   loans         Loan[]
   createdAt     DateTime  @default(now())
@@ -54,7 +54,7 @@ model Loan {
   memberId     String?
   loanType     LoanType? @relation(fields: [loanTypeId], references: [id])
   loanTypeId   String?
-  approved     Boolean?  @default(false)
+  approved     Boolean?
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
 }
@@ -73,7 +73,7 @@ model TotalSavings {
   id        String   @id @default(uuid())
   amount    Float
   comment   String
-  approved  Boolean? @default(false)
+  approved  Boolean?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
