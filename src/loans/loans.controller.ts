@@ -37,20 +37,27 @@ export class LoansController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   findOne(@Param('id') id: string) {
-    return this.loansService.findOne(+id);
+    return this.loansService.findOne(id);
   }
 
-  @Patch(':id')
+  @Patch(':id/approve')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  update(@Param('id') id: string, @Body() updateLoanDto: UpdateLoanDto) {
-    return this.loansService.update(+id, updateLoanDto);
+  approve(@Param('id') id: string, @Body() updateLoanDto: UpdateLoanDto) {
+    return this.loansService.approve(id, updateLoanDto);
+  }
+
+  @Patch(':id/reject')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  reject(@Param('id') id: string, @Body() updateLoanDto: UpdateLoanDto) {
+    return this.loansService.reject(id, updateLoanDto);
   }
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   remove(@Param('id') id: string) {
-    return this.loansService.remove(+id);
+    return this.loansService.remove(id);
   }
 }

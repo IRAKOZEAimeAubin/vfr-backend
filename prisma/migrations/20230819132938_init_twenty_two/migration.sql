@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Loan" ALTER COLUMN "amount" SET DEFAULT 0,
+ALTER COLUMN "interest" SET DEFAULT 0;

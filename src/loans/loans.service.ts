@@ -1,26 +1,67 @@
 import { Injectable } from '@nestjs/common';
 import { CreateLoanDto } from './dto/create-loan.dto';
 import { UpdateLoanDto } from './dto/update-loan.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class LoansService {
+  constructor(private prisma: PrismaService) {}
+
   create(createLoanDto: CreateLoanDto) {
-    return 'This action adds a new loan';
+    return this.prisma.loan.create({
+      data: createLoanDto,
+    });
   }
 
   findAll() {
-    return `This action returns all loans`;
+    return this.prisma.loan.findMany({
+      include: {
+        member: true,
+        loanType: true,
+      },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} loan`;
+  findOne(id: string) {
+    return this.prisma.member.findUnique({
+      where: { id },
+    });
   }
 
-  update(id: number, updateLoanDto: UpdateLoanDto) {
-    return `This action updates a #${id} loan`;
+  async approve(id: string, updateLoanDto: UpdateLoanDto) {
+    const approvedLoan = await this.prisma.loan.findUnique({
+      where: { id },
+      include: {
+        loanType: true,
+      },
+    });
+    updateLoanDto.approved = true;
+    updateLoanDto.interest =
+      approvedLoan.loanType.interestRate * approvedLoan.principal;
+    updateLoanDto.amount =
+      approvedLoan.principal +
+      approvedLoan.loanType.interestRate * approvedLoan.principal;
+
+    return this.prisma.loan.update({
+      where: { id },
+      data: updateLoanDto,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} loan`;
+  reject(id: string, updateLoanDto: UpdateLoanDto) {
+    updateLoanDto.approved = false;
+
+    return this.prisma.loan.update({
+      where: { id },
+      data: updateLoanDto,
+    });
+  }
+
+  remove(id: string) {
+    return this.prisma.loan.delete({
+      where: {
+        id,
+      },
+    });
   }
 }

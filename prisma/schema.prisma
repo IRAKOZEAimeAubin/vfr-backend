@@ -47,8 +47,10 @@ model LoanType {
 
 model Loan {
   id           String    @id @default(uuid())
-  amount       Float
+  principal    Float
   installments Int
+  interest     Float?    @default(0)
+  amount       Float?    @default(0)
   reason       String
   member       Member?   @relation(fields: [memberId], references: [id])
   memberId     String?
