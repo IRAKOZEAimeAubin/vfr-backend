@@ -18,6 +18,8 @@ export class LoansService {
       include: {
         member: true,
         loanType: true,
+        createdBy: true,
+        approvedBy: true,
       },
     });
   }
@@ -28,6 +30,8 @@ export class LoansService {
       include: {
         member: true,
         loanType: true,
+        createdBy: true,
+        approvedBy: true,
       },
     });
   }

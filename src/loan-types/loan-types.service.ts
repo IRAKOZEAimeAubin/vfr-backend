@@ -35,11 +35,22 @@ export class LoanTypesService {
   }
 
   findAll() {
-    return this.prisma.loanType.findMany();
+    return this.prisma.loanType.findMany({
+      include: {
+        createdBy: true,
+      },
+    });
   }
 
   findOne(id: string) {
-    return this.prisma.loanType.findUnique({ where: { loanId: id } });
+    return this.prisma.loanType.findUnique({
+      where: {
+        loanId: id,
+      },
+      include: {
+        createdBy: true,
+      },
+    });
   }
 
   update(id: string, updateLoanTypeDto: UpdateLoanTypeDto) {
