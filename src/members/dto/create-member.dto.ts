@@ -27,4 +27,6 @@ export class CreateMemberDto {
 
   @ApiProperty()
   active: boolean;
+
+  creatorId: string;
 }

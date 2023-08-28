@@ -11,6 +11,8 @@ export class SavingsEntity implements Savings {
   @ApiProperty()
   memberId: string;
   @ApiProperty()
+  comment: string;
+  @ApiProperty()
   createdAt: Date;
   @ApiProperty()
   updatedAt: Date;

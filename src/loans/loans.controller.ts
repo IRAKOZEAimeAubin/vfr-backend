@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  Request,
 } from '@nestjs/common';
 import { LoansService } from './loans.service';
 import { CreateLoanDto } from './dto/create-loan.dto';
@@ -22,7 +23,9 @@ export class LoansController {
   @Post()
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  create(@Body() createLoanDto: CreateLoanDto) {
+  create(@Body() createLoanDto: CreateLoanDto, @Request() request) {
+    const authenticatedUser = request.user;
+    createLoanDto.creatorId = authenticatedUser.id;
     return this.loansService.create(createLoanDto);
   }
 
@@ -43,14 +46,26 @@ export class LoansController {
   @Patch(':id/approve')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  approve(@Param('id') id: string, @Body() updateLoanDto: UpdateLoanDto) {
+  approve(
+    @Param('id') id: string,
+    @Body() updateLoanDto: UpdateLoanDto,
+    @Request() request,
+  ) {
+    const authenticatedUser = request.user;
+    updateLoanDto.approvalOfficerId = authenticatedUser.id;
     return this.loansService.approve(id, updateLoanDto);
   }
 
   @Patch(':id/reject')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  reject(@Param('id') id: string, @Body() updateLoanDto: UpdateLoanDto) {
+  reject(
+    @Param('id') id: string,
+    @Body() updateLoanDto: UpdateLoanDto,
+    @Request() request,
+  ) {
+    const authenticatedUser = request.user;
+    updateLoanDto.approvalOfficerId = authenticatedUser.id;
     return this.loansService.reject(id, updateLoanDto);
   }
 

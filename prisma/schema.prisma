@@ -11,18 +11,23 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  name      String
-  username  String   @unique
-  role      String?  @default("USER")
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                   String         @id @default(uuid())
+  name                 String
+  username             String         @unique
+  role                 String?        @default("USER")
+  password             String
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @updatedAt
+  createdLoanTypes     LoanType[]
+  createdMembers       Member[]
+  createdTotalSavings  TotalSavings[] @relation("Total Savings Approval")
+  approvedTotalSavings TotalSavings[] @relation("Total Savings Creation")
+  createdLoans         Loan[]         @relation("Loan Creation")
+  approvedLoans        Loan[]         @relation("Loan Approval")
 }
 
 model Member {
-  id            String    @id @default(uuid())
-  regNumber     String    @unique
+  regNumber     String    @id
   name          String
   phone         String    @unique
   department    String
@@ -31,51 +36,63 @@ model Member {
   active        Boolean
   savings       Savings[]
   loans         Loan[]
+  createdBy     User?     @relation(fields: [creatorId], references: [id])
+  creatorId     String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 }
 
 model LoanType {
-  id           String   @id @default(uuid())
-  loanId       String   @unique
+  loanId       String   @id
   typeName     String   @unique
   interestRate Float
   loans        Loan[]
+  createdBy    User?    @relation(fields: [creatorId], references: [id])
+  creatorId    String?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }
 
 model Loan {
-  id           String    @id @default(uuid())
-  principal    Float
-  installments Int
-  interest     Float?    @default(0)
-  amount       Float?    @default(0)
-  reason       String
-  member       Member?   @relation(fields: [memberId], references: [id])
-  memberId     String?
-  loanType     LoanType? @relation(fields: [loanTypeId], references: [id])
-  loanTypeId   String?
-  approved     Boolean?
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  id                String    @id @default(uuid())
+  principal         Float
+  installments      Int
+  interest          Float?    @default(0)
+  amount            Float?    @default(0)
+  reason            String
+  member            Member?   @relation(fields: [memberId], references: [regNumber])
+  memberId          String?
+  loanType          LoanType? @relation(fields: [loanTypeId], references: [loanId])
+  loanTypeId        String?
+  approved          Boolean?
+  createdBy         User?     @relation(fields: [creatorId], references: [id], name: "Loan Creation")
+  creatorId         String?
+  approvedBy        User?     @relation(fields: [approvalOfficerId], references: [id], name: "Loan Approval")
+  approvalOfficerId String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 }
 
 model Savings {
   id              String   @id @default(uuid())
   previousSavings Float
   currentSavings  Float
-  member          Member?  @relation(fields: [memberId], references: [id])
+  member          Member?  @relation(fields: [memberId], references: [regNumber])
   memberId        String?
+  comment         String
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }
 
 model TotalSavings {
-  id        String   @id @default(uuid())
-  amount    Float
-  comment   String
-  approved  Boolean?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                String   @id @default(uuid())
+  amount            Float
+  comment           String
+  approved          Boolean?
+  createdBy         User?    @relation(fields: [creatorId], references: [id], name: "Total Savings Creation")
+  creatorId         String?
+  approvedBy        User?    @relation(fields: [approvalOfficerId], references: [id], name: "Total Savings Approval")
+  approvalOfficerId String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 }

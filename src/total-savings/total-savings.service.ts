@@ -13,7 +13,7 @@ export class TotalSavingsService {
         active: true,
       },
       select: {
-        id: true,
+        regNumber: true,
         monthlyPledge: true,
         totalPledge: true,
       },
@@ -37,13 +37,22 @@ export class TotalSavingsService {
   }
 
   findAll() {
-    return this.prisma.totalSavings.findMany();
+    return this.prisma.totalSavings.findMany({
+      include: {
+        createdBy: true,
+        approvedBy: true,
+      },
+    });
   }
 
   findOne(id: string) {
     return this.prisma.totalSavings.findUnique({
       where: {
         id,
+      },
+      include: {
+        createdBy: true,
+        approvedBy: true,
       },
     });
   }
@@ -54,18 +63,23 @@ export class TotalSavingsService {
         active: true,
       },
       select: {
-        id: true,
+        regNumber: true,
         monthlyPledge: true,
         totalPledge: true,
       },
     });
+
+    const month = new Intl.DateTimeFormat('en-EN', { month: 'long' }).format(
+      new Date(Date.now()),
+    );
 
     const savingsPromises = activeMembers.map((member) =>
       this.prisma.savings.create({
         data: {
           previousSavings: member.totalPledge,
           currentSavings: member.totalPledge + member.monthlyPledge,
-          memberId: member.id,
+          memberId: member.regNumber,
+          comment: `Being member savings for ${month}`,
         },
       }),
     );
@@ -75,7 +89,7 @@ export class TotalSavingsService {
     const membersPromises = activeMembers.map((member) =>
       this.prisma.member.update({
         where: {
-          id: member.id,
+          regNumber: member.regNumber,
         },
         data: {
           totalPledge: member.totalPledge + member.monthlyPledge,

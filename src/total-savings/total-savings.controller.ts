@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   UseFilters,
+  Request,
 } from '@nestjs/common';
 import { TotalSavingsService } from './total-savings.service';
 import { CreateTotalSavingDto } from './dto/create-total-saving.dto';
@@ -32,7 +33,12 @@ export class TotalSavingsController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiCreatedResponse({ type: TotalSavingEntity })
-  create(@Body() createTotalSavingDto: CreateTotalSavingDto) {
+  create(
+    @Body() createTotalSavingDto: CreateTotalSavingDto,
+    @Request() request,
+  ) {
+    const authenticatedUser = request.user;
+    createTotalSavingDto.creatorId = authenticatedUser.id;
     return this.totalSavingsService.create(createTotalSavingDto);
   }
 
@@ -59,7 +65,10 @@ export class TotalSavingsController {
   approve(
     @Param('id') id: string,
     @Body() updateTotalSavingDto: UpdateTotalSavingDto,
+    @Request() request,
   ) {
+    const authenticatedUser = request.user;
+    updateTotalSavingDto.approvalOfficerId = authenticatedUser.id;
     return this.totalSavingsService.approve(id, updateTotalSavingDto);
   }
 
@@ -70,7 +79,10 @@ export class TotalSavingsController {
   reject(
     @Param('id') id: string,
     @Body() updateTotalSavingDto: UpdateTotalSavingDto,
+    @Request() request,
   ) {
+    const authenticatedUser = request.user;
+    updateTotalSavingDto.approvalOfficerId = authenticatedUser.id;
     return this.totalSavingsService.reject(id, updateTotalSavingDto);
   }
 

@@ -7,4 +7,6 @@ export class CreateSavingDto {
 
   @ApiProperty({ required: false })
   memberId: string;
+
+  comment: string;
 }

@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   UseFilters,
+  Request,
 } from '@nestjs/common';
 import { MembersService } from './members.service';
 import { CreateMemberDto } from './dto/create-member.dto';
@@ -32,7 +33,9 @@ export class MembersController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiCreatedResponse({ type: MemberEntity })
-  create(@Body() createMemberDto: CreateMemberDto) {
+  create(@Body() createMemberDto: CreateMemberDto, @Request() request) {
+    const authenticatedUser = request.user;
+    createMemberDto.creatorId = authenticatedUser.id;
     return this.membersService.create(createMemberDto);
   }
 

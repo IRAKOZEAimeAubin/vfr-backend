@@ -8,6 +8,7 @@ import {
   Delete,
   UseFilters,
   UseGuards,
+  Request,
 } from '@nestjs/common';
 import { LoanTypesService } from './loan-types.service';
 import { CreateLoanTypeDto } from './dto/create-loan-type.dto';
@@ -32,7 +33,9 @@ export class LoanTypesController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiCreatedResponse({ type: LoanTypeEntity })
-  create(@Body() createLoanTypeDto: CreateLoanTypeDto) {
+  create(@Body() createLoanTypeDto: CreateLoanTypeDto, @Request() request) {
+    const authenticatedUser = request.user;
+    createLoanTypeDto.creatorId = authenticatedUser.id;
     return this.loanTypesService.create(createLoanTypeDto);
   }
 

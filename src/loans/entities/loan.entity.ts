@@ -21,6 +21,10 @@ export class LoanEntity implements Loan {
   @ApiProperty()
   approved: boolean;
   @ApiProperty()
+  creatorId: string;
+  @ApiProperty()
+  approvalOfficerId: string;
+  @ApiProperty()
   createdAt: Date;
   @ApiProperty()
   updatedAt: Date;

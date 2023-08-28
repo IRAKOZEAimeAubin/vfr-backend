@@ -39,7 +39,7 @@ export class LoanTypesService {
   }
 
   findOne(id: string) {
-    return this.prisma.loanType.findUnique({ where: { id } });
+    return this.prisma.loanType.findUnique({ where: { loanId: id } });
   }
 
   update(id: string, updateLoanTypeDto: UpdateLoanTypeDto) {
@@ -47,12 +47,12 @@ export class LoanTypesService {
     updateLoanTypeDto.interestRate = ratePercent;
 
     return this.prisma.loanType.update({
-      where: { id },
+      where: { loanId: id },
       data: updateLoanTypeDto,
     });
   }
 
   remove(id: string) {
-    return this.prisma.loanType.delete({ where: { id } });
+    return this.prisma.loanType.delete({ where: { loanId: id } });
   }
 }

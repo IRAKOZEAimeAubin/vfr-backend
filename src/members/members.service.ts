@@ -33,21 +33,32 @@ export class MembersService {
   }
 
   findAll() {
-    return this.prisma.member.findMany();
+    return this.prisma.member.findMany({
+      include: {
+        createdBy: true,
+      },
+    });
   }
 
   findOne(id: string) {
-    return this.prisma.member.findUnique({ where: { id } });
+    return this.prisma.member.findUnique({
+      where: {
+        regNumber: id,
+      },
+      include: {
+        createdBy: true,
+      },
+    });
   }
 
   update(id: string, updateMemberDto: UpdateMemberDto) {
     return this.prisma.member.update({
-      where: { id },
+      where: { regNumber: id },
       data: updateMemberDto,
     });
   }
 
   remove(id: string) {
-    return this.prisma.member.delete({ where: { id } });
+    return this.prisma.member.delete({ where: { regNumber: id } });
   }
 }

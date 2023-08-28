@@ -23,8 +23,12 @@ export class LoansService {
   }
 
   findOne(id: string) {
-    return this.prisma.member.findUnique({
+    return this.prisma.loan.findUnique({
       where: { id },
+      include: {
+        member: true,
+        loanType: true,
+      },
     });
   }
 
@@ -37,10 +41,14 @@ export class LoansService {
     });
     updateLoanDto.approved = true;
     updateLoanDto.interest =
-      approvedLoan.loanType.interestRate * approvedLoan.principal;
+      approvedLoan.loanType.interestRate *
+      approvedLoan.principal *
+      approvedLoan.installments;
     updateLoanDto.amount =
       approvedLoan.principal +
-      approvedLoan.loanType.interestRate * approvedLoan.principal;
+      approvedLoan.loanType.interestRate *
+        approvedLoan.principal *
+        approvedLoan.installments;
 
     return this.prisma.loan.update({
       where: { id },

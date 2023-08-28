@@ -6,4 +6,8 @@ export class CreateTotalSavingDto {
   comment: string;
 
   approved?: boolean;
+
+  creatorId: string;
+
+  approvalOfficerId: string;
 }

@@ -19,6 +19,8 @@ export class MemberEntity implements Member {
   @ApiProperty({ required: false })
   active: boolean;
   @ApiProperty()
+  creatorId: string;
+  @ApiProperty()
   createdAt: Date;
   @ApiProperty()
   updatedAt: Date;

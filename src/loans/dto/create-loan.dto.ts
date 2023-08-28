@@ -28,4 +28,8 @@ export class CreateLoanDto {
 
   @ApiProperty({ required: false })
   approved: boolean;
+
+  creatorId: string;
+
+  approvalOfficerId: string;
 }
