@@ -54,23 +54,24 @@ model LoanType {
 }
 
 model Loan {
-  id                String    @id @default(uuid())
+  id                String        @id @default(uuid())
   principal         Float
   installments      Int
-  interest          Float?    @default(0)
-  amount            Float?    @default(0)
+  interest          Float?        @default(0)
+  amount            Float?        @default(0)
   reason            String
-  member            Member?   @relation(fields: [memberId], references: [regNumber])
+  member            Member?       @relation(fields: [memberId], references: [regNumber])
   memberId          String?
-  loanType          LoanType? @relation(fields: [loanTypeId], references: [loanId])
+  loanType          LoanType?     @relation(fields: [loanTypeId], references: [loanId])
   loanTypeId        String?
   approved          Boolean?
-  createdBy         User?     @relation(fields: [creatorId], references: [id], name: "Loan Creation")
+  createdBy         User?         @relation(fields: [creatorId], references: [id], name: "Loan Creation")
   creatorId         String?
-  approvedBy        User?     @relation(fields: [approvalOfficerId], references: [id], name: "Loan Approval")
+  approvedBy        User?         @relation(fields: [approvalOfficerId], references: [id], name: "Loan Approval")
   approvalOfficerId String?
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
+  loanRepayments    LoanPayment[]
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
 }
 
 model Savings {
@@ -95,4 +96,15 @@ model TotalSavings {
   approvalOfficerId String?
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
+}
+
+model LoanPayment {
+  id               String   @id @default(uuid())
+  principalRepayed Float
+  interestRepayed  Float
+  totalRepayed     Float
+  loan             Loan?    @relation(fields: [loanId], references: [id])
+  loanId           String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 }

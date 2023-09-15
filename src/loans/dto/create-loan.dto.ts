@@ -26,7 +26,7 @@ export class CreateLoanDto {
 
   amount: number;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({ required: false, default: false })
   approved: boolean;
 
   creatorId: string;
