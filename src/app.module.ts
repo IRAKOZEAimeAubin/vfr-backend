@@ -9,6 +9,7 @@ import { LoansModule } from './loans/loans.module';
 import { SavingsModule } from './savings/savings.module';
 import { LoanTypesModule } from './loan-types/loan-types.module';
 import { TotalSavingsModule } from './total-savings/total-savings.module';
+import { LoanRepaymentModule } from './loan-repayment/loan-repayment.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { TotalSavingsModule } from './total-savings/total-savings.module';
     SavingsModule,
     LoanTypesModule,
     TotalSavingsModule,
+    LoanRepaymentModule,
   ],
   controllers: [AppController],
   providers: [AppService],

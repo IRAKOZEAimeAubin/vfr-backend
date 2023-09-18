@@ -43,11 +43,14 @@ export class LoansService {
         loanType: true,
       },
     });
+
     updateLoanDto.approved = true;
+
     updateLoanDto.interest =
       approvedLoan.loanType.interestRate *
       approvedLoan.principal *
       approvedLoan.installments;
+
     updateLoanDto.amount =
       approvedLoan.principal +
       approvedLoan.loanType.interestRate *
@@ -67,6 +70,70 @@ export class LoansService {
       where: { id },
       data: updateLoanDto,
     });
+  }
+
+  async restructure(id: string, updateLoanDto: UpdateLoanDto) {
+    const restructuredLoan = await this.prisma.loan.findUnique({
+      where: { id },
+      include: {
+        loanType: true,
+      },
+    });
+
+    updateLoanDto.interest =
+      restructuredLoan.loanType.interestRate *
+      restructuredLoan.principal *
+      updateLoanDto.installments;
+
+    updateLoanDto.amount =
+      restructuredLoan.principal +
+      restructuredLoan.loanType.interestRate *
+        restructuredLoan.principal *
+        updateLoanDto.installments;
+
+    updateLoanDto.approved = null;
+    updateLoanDto.approvalOfficerId = null;
+
+    return this.prisma.loan.update({
+      where: { id },
+      data: updateLoanDto,
+    });
+  }
+
+  async topUp(id: string, updateLoanDto: UpdateLoanDto) {
+    const toppedUpLoan = await this.prisma.loan.findUnique({
+      where: { id },
+      include: {
+        loanType: true,
+      },
+    });
+
+    updateLoanDto.interest =
+      toppedUpLoan.loanType.interestRate *
+      updateLoanDto.principal *
+      updateLoanDto.installments;
+
+    updateLoanDto.amount =
+      updateLoanDto.principal +
+      toppedUpLoan.loanType.interestRate *
+        updateLoanDto.principal *
+        updateLoanDto.installments;
+
+    updateLoanDto.approved = null;
+    updateLoanDto.approvalOfficerId = null;
+
+    return this.prisma.loan.update({
+      where: { id },
+      data: updateLoanDto,
+    });
+  }
+
+  payOff(id: string, updateLoanDto: UpdateLoanDto) {
+    return 'Loan Pay Off';
+  }
+
+  addQCL(id: string, updateLoanDto: UpdateLoanDto) {
+    return 'Loan Add QCL';
   }
 
   remove(id: string) {

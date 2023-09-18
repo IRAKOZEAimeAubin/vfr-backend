@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { UpdateSavingDto } from './dto/update-saving.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -22,19 +21,6 @@ export class SavingsService {
       include: {
         member: true,
       },
-    });
-  }
-
-  update(id: string, updateSavingDto: UpdateSavingDto) {
-    return this.prisma.savings.update({
-      where: { id },
-      data: updateSavingDto,
-    });
-  }
-
-  remove(id: string) {
-    return this.prisma.savings.delete({
-      where: { id },
     });
   }
 }

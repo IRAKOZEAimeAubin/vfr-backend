@@ -69,6 +69,34 @@ export class LoansController {
     return this.loansService.reject(id, updateLoanDto);
   }
 
+  @Patch(':id/restructure')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  restructure(@Param('id') id: string, @Body() updateLoanDto: UpdateLoanDto) {
+    return this.loansService.restructure(id, updateLoanDto);
+  }
+
+  @Patch(':id/topup')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  topUp(@Param('id') id: string, @Body() updateLoanDto: UpdateLoanDto) {
+    return this.loansService.topUp(id, updateLoanDto);
+  }
+
+  @Patch(':id/payoff')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  payOff(@Param('id') id: string, @Body() updateLoanDto: UpdateLoanDto) {
+    return this.loansService.payOff(id, updateLoanDto);
+  }
+
+  @Patch(':id/addqcl')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  addQCL(@Param('id') id: string, @Body() updateLoanDto: UpdateLoanDto) {
+    return this.loansService.addQCL(id, updateLoanDto);
+  }
+
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
