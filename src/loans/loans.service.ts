@@ -20,6 +20,7 @@ export class LoansService {
         loanType: true,
         createdBy: true,
         approvedBy: true,
+        loanRepayments: true,
       },
     });
   }
@@ -72,25 +73,7 @@ export class LoansService {
     });
   }
 
-  async restructure(id: string, updateLoanDto: UpdateLoanDto) {
-    const restructuredLoan = await this.prisma.loan.findUnique({
-      where: { id },
-      include: {
-        loanType: true,
-      },
-    });
-
-    updateLoanDto.interest =
-      restructuredLoan.loanType.interestRate *
-      restructuredLoan.principal *
-      updateLoanDto.installments;
-
-    updateLoanDto.amount =
-      restructuredLoan.principal +
-      restructuredLoan.loanType.interestRate *
-        restructuredLoan.principal *
-        updateLoanDto.installments;
-
+  update(id: string, updateLoanDto: UpdateLoanDto) {
     updateLoanDto.approved = null;
     updateLoanDto.approvalOfficerId = null;
 
@@ -100,25 +83,29 @@ export class LoansService {
     });
   }
 
-  async topUp(id: string, updateLoanDto: UpdateLoanDto) {
-    const toppedUpLoan = await this.prisma.loan.findUnique({
+  async payOff(id: string, updateLoanDto: UpdateLoanDto) {
+    const payedOffLoan = await this.prisma.loan.findUnique({
       where: { id },
       include: {
         loanType: true,
       },
     });
 
-    updateLoanDto.interest =
-      toppedUpLoan.loanType.interestRate *
-      updateLoanDto.principal *
-      updateLoanDto.installments;
+    await this.prisma.loanPayment.create({
+      data: {
+        principalRepayed: payedOffLoan.principal,
+        interestRepayed: payedOffLoan.interest / payedOffLoan.installments,
+        totalRepayed:
+          payedOffLoan.principal +
+          payedOffLoan.interest / payedOffLoan.installments,
+        loanId: payedOffLoan.id,
+      },
+    });
 
-    updateLoanDto.amount =
-      updateLoanDto.principal +
-      toppedUpLoan.loanType.interestRate *
-        updateLoanDto.principal *
-        updateLoanDto.installments;
-
+    updateLoanDto.principal = 0;
+    updateLoanDto.installments = 0;
+    updateLoanDto.interest = 0;
+    updateLoanDto.amount = 0;
     updateLoanDto.approved = null;
     updateLoanDto.approvalOfficerId = null;
 
@@ -128,12 +115,34 @@ export class LoansService {
     });
   }
 
-  payOff(id: string, updateLoanDto: UpdateLoanDto) {
-    return 'Loan Pay Off';
-  }
+  async addQCL(id: string, updateLoanDto: UpdateLoanDto) {
+    const qclAddedLoan = await this.prisma.loan.findUnique({
+      where: { id },
+      include: {
+        loanType: true,
+      },
+    });
 
-  addQCL(id: string, updateLoanDto: UpdateLoanDto) {
-    return 'Loan Add QCL';
+    const principalRepayed = qclAddedLoan.principal / qclAddedLoan.installments;
+    const interestRepayed = qclAddedLoan.interest / qclAddedLoan.installments;
+    const amountRepayed = principalRepayed + interestRepayed;
+
+    await this.prisma.loanPayment.create({
+      data: {
+        principalRepayed: principalRepayed,
+        interestRepayed: interestRepayed,
+        totalRepayed: amountRepayed,
+        loanId: qclAddedLoan.id,
+      },
+    });
+
+    updateLoanDto.approved = null;
+    updateLoanDto.approvalOfficerId = null;
+
+    return this.prisma.loan.update({
+      where: { id },
+      data: updateLoanDto,
+    });
   }
 
   remove(id: string) {

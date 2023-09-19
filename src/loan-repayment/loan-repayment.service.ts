@@ -1,14 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { CreateLoanRepaymentDto } from './dto/create-loan-repayment.dto';
-import { UpdateLoanRepaymentDto } from './dto/update-loan-repayment.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class LoanRepaymentService {
+  constructor(private prisma: PrismaService) {}
+
   findAll() {
-    return `This action returns all loanRepayment`;
+    return this.prisma.loanPayment.findMany();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} loanRepayment`;
+  findOne(id: string) {
+    return this.prisma.loanPayment.findUnique({
+      where: {
+        id,
+      },
+    });
   }
 }
