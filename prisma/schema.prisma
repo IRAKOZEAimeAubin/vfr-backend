@@ -57,16 +57,16 @@ model Loan {
   id                String        @id @default(uuid())
   principal         Float
   installments      Int
-  interest          Float?        @default(0)
-  amount            Float?        @default(0)
+  interest          Float
+  amount            Float
   reason            String
-  member            Member?       @relation(fields: [memberId], references: [regNumber])
-  memberId          String?
-  loanType          LoanType?     @relation(fields: [loanTypeId], references: [loanId])
-  loanTypeId        String?
-  approved          Boolean?
-  createdBy         User?         @relation(fields: [creatorId], references: [id], name: "Loan Creation")
-  creatorId         String?
+  member            Member        @relation(fields: [memberId], references: [regNumber])
+  memberId          String
+  loanType          LoanType      @relation(fields: [loanTypeId], references: [loanId])
+  loanTypeId        String
+  approved          Boolean
+  createdBy         User          @relation(fields: [creatorId], references: [id], name: "Loan Creation")
+  creatorId         String
   approvedBy        User?         @relation(fields: [approvalOfficerId], references: [id], name: "Loan Approval")
   approvalOfficerId String?
   loanRepayments    LoanPayment[]

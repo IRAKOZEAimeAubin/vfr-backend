@@ -3,23 +3,23 @@ import { IsNumber, IsString } from 'class-validator';
 
 export class CreateLoanDto {
   @IsString()
-  @ApiProperty({ required: false })
+  @ApiProperty()
   memberId: string;
 
   @IsString()
-  @ApiProperty({ required: false })
+  @ApiProperty()
   loanTypeId: string;
 
   @IsNumber()
-  @ApiProperty({ required: false })
+  @ApiProperty()
   principal: number;
 
   @IsNumber()
-  @ApiProperty({ required: false })
+  @ApiProperty()
   installments: number;
 
   @IsString()
-  @ApiProperty({ required: false })
+  @ApiProperty()
   reason: string;
 
   interest: number;
